@@ -1,0 +1,64 @@
+{% extends "userBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/restaurants.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+{% endblock %}
+
+{% block title %} User | Browse Restaurants {% endblock %}
+
+{% block restaurants %} active {% endblock %}
+
+{% block items %} {{ count }} {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/restaurants.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<br> <br> <br>
+<center>
+{% if obj %}
+<div class="row">
+{% for i in obj %}
+  <div class="col-sm-4">
+    <div class="card" style="width: 400px;">
+      <img class="card-img-top" src="../{{ i.facade }}" alt="Restaurant Image" width="350" height="220">
+      <div class="card-body">
+        <h5 class="card-title">{{ i.restaurant_name }}</h5>
+        <p class="card-text">
+            {% for key, value in cuisines.items %}
+                {% if i.restaurant_id == key %}
+                    {{ value }} <br>
+                {% endif %}
+            {% endfor %}
+            {% for key, value in cost_for_twos.items %}
+                {% if i.restaurant_id == key %}
+                    {{ value }}
+                {% endif %}
+            {% endfor %}
+        </p>
+        <a href="/user/browseRestaurant/{{ i.restaurant_id }}" class="btn btn-primary">View Menu</a>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
+{% else %}
+    <h1>Oh! All restaurants are currently unserviceable</h1>
+    <br> <br>
+{% endif %}
+</center>
+
+{% endblock %}

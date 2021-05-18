@@ -1,0 +1,106 @@
+{% extends "userBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/icon.css' %}">
+
+{% endblock %}
+
+{% block title %} User | Home {% endblock %}
+
+{% block home %} active {% endblock %}
+
+{% block items %} {{ count }} {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/home.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<div class="intro-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <p>We empower our users in discovering new tastes and experiences across the city. By putting together meticulous information for our users, we enable them to make an informed choice.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<br> <br>
+<h1 style="color: #cc0000; margin-left: 80px;" align="center">How It Works</h1><br>
+<center>
+<table class="body-main" width="90%">
+    <tr>
+        <td align="center"><img src="{% static 'img/01.jpg' %}" height="200" width="200"></td>
+        <td align="center"><img src="{% static 'img/02.jpg' %}" height="200" width="200"></td>
+        <td align="center"><img src="{% static 'img/03.jpg' %}" height="200" width="200"></td>
+    </tr>
+    <tr style="color: #cc0000;">
+        <td align="center"><h4>Order</h4></td>
+        <td align="center"><h4>Relax</h4></td>
+        <td align="center"><h4>Enjoy</h4></td>
+    </tr>
+    <tr>
+        <td align="center" width="20%">Discover all delicious restaurants near you and order their tasty meals right to you.</td>
+        <td align="center" width="20%">Sit back and relax as the restaurant prepares your order.</td>
+        <td align="center" width="20%">Our delivery guy picks up your order and brings it to you. Enjoy!</td>
+    </tr>
+</table>
+</center>
+<br> <br>
+<div id="content" role="main">
+    <div class="featurebg-container section">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <p>
+                        <p>Our technology platform connects customers, restaurant partners and delivery partners, serving their multiple needs.</p>
+                        <p>Customers use our platform to search and discover restaurants and order food delivery.</p>
+                        <p>On the other hand, we provide restaurant partners with industry-specific marketing tools which enable them to engage and acquire customers to grow their business while also providing a reliable and efficient last mile delivery service.</p>
+                        <p>We also provide our delivery partners with transparent and flexible earning opportunities.</p>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br> <br>
+<center>
+<div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel" style="width: 70%;">
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-bs-interval="3000">
+      <img src="{% static 'img/carousel1.jpg' %}" class="d-block w-100" height="600">
+    </div>
+    <div class="carousel-item" data-bs-interval="3000">
+      <img src="{% static 'img/carousel2.jpg' %}" class="d-block w-100" height="600">
+    </div>
+    <div class="carousel-item" data-bs-interval="3000">
+      <img src="{% static 'img/carousel3.jpg' %}" class="d-block w-100" height="600">
+    </div>
+    <div class="carousel-item" data-bs-interval="3000">
+      <img src="{% static 'img/carousel4.jpg' %}" class="d-block w-100" height="600">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+</center>
+<br> <br>
+
+{% endblock %}

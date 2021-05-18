@@ -1,0 +1,117 @@
+{% extends "deliveryBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+{% endblock %}
+
+{% block title %} Delivery Person | Profile {% endblock %}
+
+{% block profile %} active {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/profile.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto" style="width: 50%;">
+    <div class="card card0 border-0">
+        <div class="row d-flex">
+            <div class="col-lg-6" style="width: 100%;">
+
+                <div class="card2 card border-0 px-4 py-5">
+                    <h1 align="center">Profile</h1> <br> <br>
+                    <div class="row px-3">
+                        <label class="mb-1"></label>
+                        <h6 class="mb-0 text-sm">Delivery Person ID</h6><br>
+                        <input class="mb-4" type="text" name="text" placeholder="Delivery ID" value="{{ obj.delivery_id }}" readonly>
+                    </div>
+                    <div class="row px-3">
+                        <label class="mb-1"></label>
+                        <h6 class="mb-0 text-sm">Name</h6><br>
+                        <input class="mb-4" type="text" name="text" placeholder="Name" value="{{ obj.name }}" readonly>
+                    </div>
+                    <div class="row px-3">
+                        <label class="mb-1"></label>
+                        <h6 class="mb-0 text-sm">Email</h6><br>
+                        <input class="mb-4" type="email" name="text" placeholder="Email" value="{{ obj.email }}" readonly>
+                    </div>
+                    <div class="row px-3">
+                        <label class="mb-1"></label>
+                        <h6 class="mb-0 text-sm">Contact</h6><br>
+                        <input class="mb-4" type="number" name="text" placeholder="Contact" value="{{ obj.contact }}" readonly>
+                    </div>
+                    <div class="row px-3">
+                        <label class="mb-1"></label>
+                        <h6 class="mb-0 text-sm">Address</h6><br>
+                        <input class="mb-4" type="text" name="text" placeholder="Address" value="{{ obj.address }}" readonly>
+                    </div>
+                    <div class="row px-3">
+                        <label class="mb-1"></label>
+                        <h6 class="mb-0 text-sm">Vehicle Type</h6><br>
+                        <input class="mb-4" type="text" name="text" placeholder="Vehicle Type" value="{{ obj.vehicle_type }}" readonly>
+                    </div>
+                    <div class="row px-3">
+                        <label class="mb-1"></label>
+                        <h6 class="mb-0 text-sm">Vehicle Model</h6><br>
+                        <input class="mb-4" type="text" name="text" placeholder="Vehicle Model" value="{{ obj.vehicle_model }}" readonly>
+                    </div>
+                    {% if obj.vehicle_registration_certificate %}
+                        <br>
+                        <div class="row px-3">
+                            <div class="col-sm-8 col-12">
+                                <h5>Vehicle Registration Certificate</h5>
+                            </div>
+                            <div class="col-sm-4 col-12">
+                                <a href="/delivery/open/rc"><button type="button" class="btn btn-success" style="float: right;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                </svg>&nbsp;&nbsp;Download</button></a>
+                            </div>
+                            <br> <br>
+                        </div>
+                    {% endif %}
+                    {% if obj.driving_license %}
+                        <br>
+                        <div class="row px-3">
+                            <div class="col-sm-8 col-12">
+                                <h5>Driving License</h5>
+                            </div>
+                            <div class="col-sm-4 col-12">
+                                <a href="/delivery/open/dl"><button type="button" class="btn btn-success" style="float: right;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                </svg>&nbsp;&nbsp;Download</button></a>
+                            </div>
+                            <br> <br>
+                        </div>
+                    {% endif %}
+                    <br> <br>
+                    <div class="row mb-3 px-3">
+                        <div class="col-sm-6 col-12">
+                            <center><a href="/delivery/updatePassword"><button type="submit" class="btn btn-blue text-center">Update Profile</button></a></center>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <center><a href="/delivery/resetPassword"><button type="submit" class="btn btn-blue text-center">Reset Password</button></a></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

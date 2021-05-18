@@ -1,0 +1,143 @@
+{% extends "deliveryBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    input[type="checkbox"][readonly] {
+        pointer-events: none;
+    }
+</style>
+
+{% endblock %}
+
+{% block title %} Delivery Person | Orders {% endblock %}
+
+{% block orders %} active {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/orders.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<br> <br> <br>
+
+{% if obj %}
+    <center>
+    <table class="table table-striped" style="width: 90%;">
+        <thead>
+            <tr>
+                <th class="table-dark" scope="col" style="width: 10%;">Order ID</th>
+                <th class="table-dark" scope="col" style="width: 16%;">Restaurant Details</th>
+                <th class="table-dark" scope="col" style="width: 14%;">Items</th>
+                <th class="table-dark" scope="col" style="width: 10%;">Quantity</th>
+                <th class="table-dark" scope="col" style="width: 10%;">Total</th>
+                <th class="table-dark" scope="col" style="width: 16%;">Customer Details</th>
+                <th class="table-dark" scope="col" style="width: 14%;">Status/Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in obj %}
+                <tr>
+                    <td>{{ i.order_number }}</td>
+                    <td>
+                        <b>{{ i.restaurant.restaurant_name }}</b> <br> <br>
+                        {{ i.restaurant.address }} <br>
+                        {{ i.restaurant.city }} - {{ i.restaurant.zip }} <br> <br>
+                        {{ i.restaurant.restaurant_contact }}
+                    </td>
+                    <td>
+                        {% for key, value in items.items %}
+                            {% if key == i.order_number %}
+                                {% for j in value %}
+                                    {{ j }} <br>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for key, value in quantity.items %}
+                            {% if key == i.order_number %}
+                                {% for j in value %}
+                                    {{ j }} <br>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>Rs {{ i.total }}</td>
+                    <td>
+                        <b>{{ i.user.name }}</b> <br> <br>
+                        {{ i.address.line1 }} <br>
+                        {{ i.address.line2 }} <br>
+                        {{ i.address.landmark }} <br>
+                        {{ i.address.locality }} <br>
+                        {{ i.address.city }} - {{ i.address.zip }} <br> <br>
+                        {{ i.user.contact }}
+                    </td>
+                    <td>
+                        {% if i.picked_up %}
+                            <input type="checkbox" checked readonly> Order Picked Up
+                        {% else %}
+                            <input type="checkbox" readonly> Order Picked Up
+                        {% endif %}
+                        <br>
+                        {% if i.out_for_delivery %}
+                            <input type="checkbox" checked readonly> Out For Delivery
+                        {% else %}
+                            <input type="checkbox" readonly> Out For Delivery
+                        {% endif %}
+                        <br>
+                        {% if i.delivered %}
+                            <input type="checkbox" checked readonly> Delivered
+                        {% else %}
+                            <input type="checkbox" readonly> Delivered
+                        {% endif %}
+                        <br> <br>
+                        <form action="{% url 'DeliveryUpdateOrder' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="order_id" value="{{ i.order_number }}">
+                            <center>
+                                {% if i.ready_for_delivery %}
+                                    {% if i.picked_up %}
+                                        {% if i.out_for_delivery %}
+                                            {% if i.delivered %}
+                                                <button type="submit" class="btn btn-success" disabled>Delivered</button>
+                                            {% else %}
+                                                <button type="submit" class="btn btn-success">Delivered</button>
+                                            {% endif %}
+                                        {% else %}
+                                            <button type="submit" class="btn btn-success">Out For Delivery</button>
+                                        {% endif %}
+                                    {% else %}
+                                        <button type="submit" class="btn btn-success">Pick Up Order</button>
+                                    {% endif %}
+                                {% else %}
+                                    <button type="submit" class="btn btn-success" disabled>Reach The Restaurant</button>
+                                {% endif %}
+                            </center>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </center>
+    <br>
+{% else %}
+    <h1 align="center">No Active Orders</h1>
+    <br> <br>
+{% endif %}
+</center>
+<br>
+
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "restaurantBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}">
+<script type="text/javascript" src="{% static 'js/addItem.js' %}"> </script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<link href="{% static 'vendor/mdi-font/css/material-design-iconic-font.min.css' %}" rel="stylesheet" media="all">
+<link href="{% static 'vendor/font-awesome-4.7/css/font-awesome.min.css' %}" rel="stylesheet" media="all">
+
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+
+<link href="{% static 'vendor/select2/select2.min.css' %}" rel="stylesheet" media="all">
+<link href="{% static 'vendor/datepicker/daterangepicker.css' %}" rel="stylesheet" media="all">
+
+<link href="{% static 'css/main.css' %}" rel="stylesheet" media="all">
+
+{% endblock %}
+
+{% block title %} Restaurant | Add Item {% endblock %}
+
+{% block menu %} active {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/addItem.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<div class="page-wrapper bg-blue p-t-100 p-b-100 font-robo">
+    <div class="wrapper wrapper--w680">
+        <div class="card card-1">
+            <div class="card-heading"></div>
+            <div class="card-body">
+                <h2 class="title" align="center">Item</h2>
+                {% if item %}
+                    <form action="/restaurant/addItem/{{ item }}" method="POST" onsubmit="return validate();">
+                {% else %}
+                    <form action="{% url 'AddCategoryItem' %}" method="POST" onsubmit="return validate();">
+                {% endif %}
+                    {% csrf_token %}
+                    <div class="input-group">
+                        {{ form.category }}
+                    </div>
+                    <div class="input-group">
+                        {{ form.item }}
+                    </div>
+                    <div class="input-group">
+                        <div class="rs-select2 js-select-simple select--no-search" style="width: 100%;">
+                            <select name="quantity" id="quantity" required>
+                                <option value="None" disabled="disabled" selected="selected">Quantity</option>
+                                <option value="None" disabled="disabled">------------------------------------------------------------------------------------------------------------------------</option>
+                                <option value="Quarter Plate">Quarter Plate</option>
+                                <option value="Half Plate">Half Plate</option>
+                                <option value="Full Plate">Full Plate</option>
+                                <option value="None" disabled="disabled">------------------------------------------------------------------------------------------------------------------------</option>
+                                <option value="100 ml">100 ml</option>
+                                <option value="250 ml">250 ml</option>
+                                <option value="500 ml">500 ml</option>
+                                <option value="1 L">1 L</option>
+                                <option value="None" disabled="disabled">------------------------------------------------------------------------------------------------------------------------</option>
+                                <option value="100 gm">100 gm</option>
+                                <option value="250 gm">250 gm</option>
+                                <option value="500 gm">500 gm</option>
+                                <option value="1 kg">1 kg</option>
+                                <option value="None" disabled="disabled">------------------------------------------------------------------------------------------------------------------------</option>
+                            </select>
+                            <div class="select-dropdown"></div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="rs-select2 js-select-simple select--no-search" style="width: 100%;">
+                            <select name="item_type" id="item_type" required>
+                                <option value="None" disabled="disabled" selected="selected">Item Type</option>
+                                <option value="None" disabled="disabled">-----------------------------------------------------------------------------------------------------------------------------</option>
+                                <option value="Veg">Veg</option>
+                                <option value="Non-Veg">Non-Veg</option>
+                                <option value="Egg">Egg</option>
+                            </select>
+                            <div class="select-dropdown"></div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        {{ form.price }}
+                    </div>
+                    <div class="p-t-20" align="center">
+                        <button class="btn btn--radius btn--green" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+<script src="{% static 'vendor/select2/select2.min.js' %}"></script>
+<script src="{% static 'vendor/datepicker/moment.min.js' %}"></script>
+<script src="{% static 'vendor/datepicker/daterangepicker.js' %}"></script>
+
+<script src="{% static 'js/global.js' %}"></script>
+
+{% endblock %}

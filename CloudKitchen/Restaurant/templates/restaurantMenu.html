@@ -1,0 +1,82 @@
+{% extends "restaurantBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+{% endblock %}
+
+{% block title %} Restaurant | Menu {% endblock %}
+
+{% block menu %} active {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/menu.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<br> <br> <br>
+
+<center><a href="/restaurant/addCategory"><button type="button" class="btn btn-primary">Add New Category of Items</button></a></center>
+
+<br> <br>
+
+{% if category_object %}
+    {% for i in category_object %}
+        <center>
+        <div class="caption" align="left">
+            <h4>{{ i.category }}</h4>
+            <a href="/restaurant/deleteCategory/{{ i.category }}"><button type="button" class="btn btn-danger">Delete</button></a>
+            <a href="/restaurant/updateCategory/{{ i.category }}"><button type="button" class="btn btn-success" style="margin-right: 2%;">Rename</button></a>
+        </div>
+        <table class="table table-striped" style="width: 80%;">
+            <thead>
+                <tr>
+                    <th class="table-dark" scope="col" style="width: 19%;">Name</th>
+                    <th class="table-dark" scope="col" style="width: 16%;">Quantity</th>
+                    <th class="table-dark" scope="col" style="width: 13%;">Type</th>
+                    <th class="table-dark" scope="col" style="width: 16%;">Price</th>
+                    <th class="table-dark" scope="col" style="width: 16%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for j in item_object %}
+                    {% if i == j.category %}
+                        <tr>
+                            <td>{{ j.name }}</td>
+                            <td>{{ j.quantity }}</td>
+                            <td>{{ j.item_type }}</td>
+                            <td>{{ j.price }}</td>
+                            <td>
+                                <a href="/restaurant/updateItem/{{ i.category }}/{{ j.name }}"><button type="button" class="btn btn-success">Update</button></a> &nbsp; &nbsp;
+                                <a href="/restaurant/deleteItem/{{ i.category }}/{{ j.name }}"><button type="button" class="btn btn-danger">Delete</button></a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="down" align="center">
+            <a href="/restaurant/addItem/{{ i.category }}"><button type="button" class="btn btn-primary">Add New Item</button></a>
+        </div>
+        </center>
+        <br> <br>
+    {% endfor %}
+{% else %}
+    <h1 align="center">No Items Available</h1>
+    <br> <br>
+{% endif %}
+<center>
+<br>
+
+{% endblock %}

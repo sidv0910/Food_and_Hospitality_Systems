@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/restaurantMenu.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+{% endblock %}
+
+{% block title %} Restaurant Menu {% endblock %}
+
+{% block restaurant %} active {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/menu.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+<center>
+<br> <br> <br>
+
+<table class="table table-dark" style="width: 80%; height: 300px;">
+  <tbody>
+    <tr>
+    <td rowspan="4" align="center" style="width: 50%; border: 0px; vertical-align: middle;"><img src="../user/{{ res.facade }}" width="400" height="250"></td>
+    <td style="width: 50%; border: 0px; vertical-align: middle;"><h1>{{ res.restaurant_name }}</h1></td>
+  </tr>
+  <tr>
+    <td style="width: 50%; border: 0px; vertical-align: middle;"><h5>{{ cuisines }}</h5></td>
+  </tr>
+  <tr>
+    <td style="width: 50%; border: 0px; vertical-align: middle;"><h5>{{ res.address }}, {{ res.city }}</h5></td>
+  </tr>
+  <tr>
+    <td style="width: 50%; border: 0px; vertical-align: middle;"><h5>{{ cost_for_twos }}</h5></td>
+  </tr>
+  </tbody>
+</table>
+
+<br> <br>
+{% if item_object %}
+    {% for key, value in item_object.items %}
+        <center>
+        <div class="caption" align="left">
+            <h4>{{ key }}</h4>
+        </div>
+        <table class="table table-striped" style="width: 80%;">
+            <thead>
+                <tr>
+                    <th class="table-dark" scope="col" style="width: 5%;"></th>
+                    <th class="table-dark" scope="col" style="width: 25%;">Name</th>
+                    <th class="table-dark" scope="col" style="width: 25%;">Quantity</th>
+                    <th class="table-dark" scope="col" style="width: 25%;">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in value %}
+                    <tr>
+                        <td align="center">
+                            {% if i.item_type == "Veg" %}
+                                <img src="{% static 'img/Veg.jpg' %}" width="20" height="20">
+                            {% endif %}
+                            {% if i.item_type == "Non-Veg" %}
+                                <img src="{% static 'img/Non-Veg.jpg' %}" width="20" height="20">
+                            {% endif %}
+                            {% if i.item_type == "Egg" %}
+                                <img src="{% static 'img/Egg.jpg' %}" width="20" height="20">
+                            {% endif %}
+                        </td>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.quantity }}</td>
+                        <td>{{ i.price }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </center>
+        <br> <br>
+    {% endfor %}
+{% else %}
+    <h1 align="center">No Items Available</h1>
+    <br> <br>
+{% endif %}
+</center>
+<br>
+
+{% endblock %}

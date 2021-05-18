@@ -1,0 +1,142 @@
+{% extends "userBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/restaurantMenu.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+{% endblock %}
+
+{% block title %} User | Cart {% endblock %}
+
+{% block cart %} active {% endblock %}
+
+{% block items %} {{ count }} {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/cart.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+<center>
+<br> <br> <br>
+
+{% if obj %}
+    <h1>Items</h1>
+    <br> <br>
+    <center>
+    <div class="caption" align="left">
+        <h4>Restaurant - {{ res }}</h4>
+    </div>
+    <table class="table table-striped" style="width: 80%;">
+        <thead>
+            <tr>
+                <th class="table-dark" scope="col" style="width: 3%;"></th>
+                <th class="table-dark" scope="col" style="width: 20%;">Name</th>
+                <th class="table-dark" scope="col" style="width: 12%;">Quantity</th>
+                <th class="table-dark" scope="col" style="width: 10%;">Price</th>
+                <th class="table-dark text-center" scope="col" style="width: 19%;">Update</th>
+                <th class="table-dark text-center" scope="col" style="width: 16%;">Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in obj %}
+                <tr>
+                    <td align="center">
+                        {% if i.item.item_type == "Veg" %}
+                            <img src="{% static 'img/Veg.jpg' %}" width="20" height="20">
+                        {% endif %}
+                        {% if i.item.item_type == "Non-Veg" %}
+                            <img src="{% static 'img/Non-Veg.jpg' %}" width="20" height="20">
+                        {% endif %}
+                        {% if i.item.item_type == "Egg" %}
+                            <img src="{% static 'img/Egg.jpg' %}" width="20" height="20">
+                        {% endif %}
+                    </td>
+                    <td>{{ i.item.name }}</td>
+                    <td>
+                        {% for key, value in quantity.items %}
+                            {% if key == i.item.name %}
+                                {{ value }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for key, value in price.items %}
+                            {% if key == i.item.name %}
+                                {{ value }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td align="center">
+                        <form action="{% url 'UpdateCart' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="restaurant" value="{{ i.restaurant.restaurant_id }}">
+                            <input type="hidden" name="category" value="{{ i.category.category }}">
+                            <input type="hidden" name="item" value="{{ i.item.name }}">
+                            <select class="form-select" name="amount" style="max-width: 25%; display: inline-block;">
+                                {% for a in range %}
+                                    {% if i.quantity == a %}
+                                        <option selected disabled value="">{{ a }}</option>
+                                    {% else %}
+                                        <option value="{{ a }}">{{ a }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select> &nbsp; &nbsp;
+                            <button type="submit" class="btn btn-success">Update to Cart</button>
+                        </form>
+                    </td>
+                    <td align="center">
+                        <a href="/user/deleteFromCart/{{ i.restaurant.restaurant_id }}/{{ i.category.category }}/{{ i.item.name }}"><button type="button" class="btn btn-danger">Remove from Cart</button></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <th class="table-dark" scope="col" style="width: 3%;"></th>
+                <th class="table-dark" scope="col" style="width: 20%;"></th>
+                <th class="table-dark" scope="col" style="width: 12%; text-align: right;">Total &nbsp;-</th>
+                <th class="table-dark" scope="col" style="width: 10%;">{{ total }}</th>
+                <th class="table-dark" scope="col" style="width: 19%;"> </th>
+                <th class="table-dark" scope="col" style="width: 16%;"></th>
+            </tr>
+            <tr>
+                <th class="table-dark" scope="col" style="width: 3%;"></th>
+                <th class="table-dark" scope="col" style="width: 20%;"></th>
+                <th class="table-dark" scope="col" style="width: 12%; text-align: right;">Delivery Charges &nbsp;-</th>
+                <th class="table-dark" scope="col" style="width: 10%;">Rs 25</th>
+                <th class="table-dark" scope="col" style="width: 19%;"> </th>
+                <th class="table-dark" scope="col" style="width: 16%;"></th>
+            </tr>
+            <tr>
+                <th class="table-dark" scope="col" style="width: 3%;"></th>
+                <th class="table-dark" scope="col" style="width: 20%;"></th>
+                <th class="table-dark" scope="col" style="width: 12%; text-align: right;">Grand Total &nbsp;-</th>
+                <th class="table-dark" scope="col" style="width: 10%;">{{ gt }}</th>
+                <th class="table-dark" scope="col" style="width: 19%;"> </th>
+                <th class="table-dark" scope="col" style="width: 16%;"></th>
+            </tr>
+        </tbody>
+    </table>
+    </center>
+    <br> <br>
+    <form action="{% url 'Proceed' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-info">Continue</button>
+    </form>
+    <br> <br>
+{% else %}
+    <h1 align="center">No Items in Cart</h1>
+    <br> <br>
+{% endif %}
+</center>
+<br>
+
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends "userBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/restaurantMenu.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<style>
+  .line {
+    width: 38%;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .divider {
+    font-size: 20px;
+    font-weight: bold;
+  }
+</style>
+
+<script>
+  function validate() {
+    var radios = document.getElementsByName("address");
+    for (var i = 0, len = radios.length; i < len; i++) {
+        if (radios[i].checked) {
+            return true;
+        }
+    }
+    alert("Please select any saved address to continue.");
+    return false;
+  }
+</script>
+
+{% endblock %}
+
+{% block title %} User | Cart {% endblock %}
+
+{% block cart %} active {% endblock %}
+
+{% block items %} {{ count }} {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/cart.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<center>
+<br> <br> <br>
+<h1>Address</h1>
+<br> <br>
+<hr style="width: 80%; height: 2px;">
+<br> <br>
+<h4>Choose from a Saved Address</h4>
+<br> <br>
+
+{% if obj %}
+  <form action="{% url 'Final' %}" method="post" onsubmit="return validate();">
+    {% csrf_token %}
+    {% for i in obj %}
+      <input type="radio" id="address" value="{{ i.address_id }}" name="address" style="display: inline;"> &nbsp; <input type="text" class="form-control" readonly style="width: 75%; display: inline;" value="{{ i.line1 }}, {{ i.line2 }}, {{ i.landmark }}, {{ i.locality }}, {{ i.city }} - {{ i.zip }}"> <br> <br>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Continue</button>
+  </form>
+{% else %}
+    <h4 align="center">No Saved Address</h4>
+{% endif %}
+
+<br> <br>
+<div class="divider">
+  <hr class="line" style="height: 2px;"> &nbsp; OR &nbsp; <hr class="line" style="height: 2px;">
+</div>
+<br> <br>
+<div class="card bg-light" style="width: 50%;">
+<article class="card-body mx-auto" style="max-width: 500px;">
+	<h4 class="card-title mt-3 text-center">Add a New Address</h4>
+	<br>
+	<form action="{% url 'SaveAndFinal' %}" method="post">
+		{% csrf_token %}
+		<div class="form-group input-group">
+			{{ form.line1 }}
+		</div>
+		<br>
+		<div class="form-group input-group">
+			{{ form.line2 }}
+		</div>
+		<br>
+		<div class="form-group input-group">
+			{{ form.landmark }}
+		</div>
+		<br>
+		<div class="form-group input-group">
+			{{ form.locality }}
+		</div>
+		<br>
+		<div class="form-group input-group">
+			{{ form.city }}
+		</div>
+		<br>
+        <div class="form-group input-group">
+			{{ form.zip }}
+		</div>
+		<br>
+		<center>
+		<div class="form-group">
+			<button type="submit" class="btn btn-primary btn-block"> Save and Continue </button>
+		</div>
+		</center>
+		<br>
+	</form>
+</article>
+</div>
+
+<br> <br>
+</center>
+<br>
+
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "restaurantBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/contact.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/icon.css' %}">
+<script type="text/javascript" src="{% static 'js/contact.js' %}"> </script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+{% endblock %}
+
+{% block title %} Restaurant | Contact {% endblock %}
+
+{% block contact %} active {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/contact.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<section class="contact-page-area section-gap">
+    <br> <br>
+    <div class="container">
+        <div class="row">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14008.114827184245!2d77.20653218198595!3d28.628901718705755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd37b741d057%3A0xcdee88e47393c3f1!2sConnaught%20Place%2C%20New%20Delhi%2C%20Delhi%20110001!5e0!3m2!1sen!2sin!4v1620615644473!5m2!1sen!2sin" width="1200" height="600" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <div class="col-lg-4 d-flex flex-column address-wrap">
+                <br> <br>
+                <div class="single-contact-address d-flex flex-row">
+                    <div class="icon">
+                        <span class="lnr lnr-home"></span>
+                    </div>
+                    <div class="contact-details">
+                        <h5>Delhi, India</h5>
+                        <p>
+                            Connaught Place, New Delhi
+                        </p>
+                    </div>
+                </div>
+                <div class="single-contact-address d-flex flex-row">
+                    <div class="icon">
+                        <span class="lnr lnr-phone-handset"></span>
+                    </div>
+                    <div class="contact-details">
+                        <h5>+91 9006531005</h5>
+                        <p>Timings: 8 a.m. to 10 p.m.</p>
+                    </div>
+                </div>
+                <div class="single-contact-address d-flex flex-row">
+                    <div class="icon">
+                        <span class="lnr lnr-envelope"></span>
+                    </div>
+                    <div class="contact-details">
+                        <h5>cloudkitchen356@gmail.com</h5>
+                        <p>Send us your query anytime!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <br> <br>
+                <form class="form-area contact-form text-right" action="{% url 'Contact' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-6 form-group">
+                            {{ form.name }} <br>
+                            {{ form.email }} <br>
+                            {{ form.subject }} <br>
+                        </div>
+                        <div class="col-lg-6 form-group">
+                            {{ form.message }}
+                        </div>
+                        <div class="col-lg-12">
+                            <br>
+                            <div class="alert-msg" style="text-align: left;"></div>
+                            <button class="btn btn-danger" style="float: right;">Send Message</button>
+                        </div>
+                    </div>
+                </form>
+                <br> <br>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends "restaurantBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    input[type="checkbox"][readonly] {
+        pointer-events: none;
+    }
+</style>
+
+{% endblock %}
+
+{% block title %} Restaurant | Order History {% endblock %}
+
+{% block profile %} active {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/orderHistory.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<br> <br> <br>
+
+{% if obj %}
+    <center>
+    <table class="table table-striped" style="width: 90%;">
+        <thead>
+            <tr>
+                <th class="table-dark" scope="col" style="width: 12%;">Order ID</th>
+                <th class="table-dark" scope="col" style="width: 16%;">Items</th>
+                <th class="table-dark" scope="col" style="width: 10%;">Quantity</th>
+                <th class="table-dark" scope="col" style="width: 10%;">Total Price</th>
+                <th class="table-dark" scope="col" style="width: 16%;">Delivery Person</th>
+                <th class="table-dark" scope="col" style="width: 13%;">Order Date</th>
+                <th class="table-dark" scope="col" style="width: 13%;">Delivery Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in obj %}
+                <tr>
+                    <td>{{ i.order_number }}</td>
+                    <td>
+                        {% for key, value in items.items %}
+                            {% if key == i.order_number %}
+                                {% for j in value %}
+                                    {{ j }} <br>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for key, value in quantity.items %}
+                            {% if key == i.order_number %}
+                                {% for j in value %}
+                                    {{ j }} <br>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>Rs {{ i.total }}</td>
+                    <td>
+                          {% for key, value in delivery_name.items %}
+                              {% if key == i.order_number %}
+                                  {% for j in value %}
+                                      {{ j }} <br>
+                                  {% endfor %}
+                              {% endif %}
+                          {% endfor %}
+                          {% for key, value in delivery_contact.items %}
+                              {% if key == i.order_number %}
+                                  {% for j in value %}
+                                      {{ j }} <br>
+                                  {% endfor %}
+                              {% endif %}
+                          {% endfor %}
+                    </td>
+                    <td>
+                        {{ i.date }}
+                    </td>
+                    <td>
+                        {{ i.time }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </center>
+    <br>
+{% else %}
+    <h1 align="center">No Order History</h1>
+    <br> <br>
+{% endif %}
+</center>
+<br>
+
+{% endblock %}

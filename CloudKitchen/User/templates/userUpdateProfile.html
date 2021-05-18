@@ -1,0 +1,72 @@
+{% extends "userBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+{% endblock %}
+
+{% block title %} User | Update Profile {% endblock %}
+
+{% block items %} {{ count }} {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/updateProfile.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<center>
+<div class="container">
+<br>
+<div class="card bg-light" style="width: 50%;">
+<article class="card-body mx-auto" style="max-width: 500px;">
+	<h4 class="card-title mt-3 text-center">Profile</h4>
+	<br>
+    <form action="{% url 'UserUpdateProfile' %}" method="post">
+		{% csrf_token %}
+		<div class="form-group input-group">
+			<div class="input-group-prepend">
+				<span class="input-group-text"> <i class="fa fa-user fa-2x"></i> </span>
+            </div>
+			{{ form.name }}
+		</div>
+		<br>
+		<div class="form-group input-group">
+			<div class="input-group-prepend">
+				<span class="input-group-text"> <i class="fa fa-envelope fa-2x"></i> </span>
+			 </div>
+			<input type="email" name="email" class="form-control" style="background-color: white;" placeholder="Email Address" value="{{ obj.email }}" readonly>
+		</div>
+		<br>
+		<div class="form-group input-group">
+			<div class="input-group-prepend">
+				<span class="input-group-text"> <i class="fa fa-phone fa-2x"></i> </span>
+			</div>
+			<input type="text" value="+91" class="form-control" style="max-width: 60px; background-color: white;" readonly>
+			{{ form.contact }}
+		</div>
+		<br> <br>
+		<center>
+		<div class="form-group">
+			<button type="submit" class="btn btn-primary btn-block"> Update </button>
+		</div>
+        <br>
+		</center>
+    </form>
+</article>
+</div>
+</div>
+</center>
+<br>
+
+{% endblock %}

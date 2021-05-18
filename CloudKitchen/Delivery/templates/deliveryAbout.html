@@ -1,0 +1,77 @@
+{% extends "deliveryBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/about.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/icon.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+{% endblock %}
+
+{% block title %} Delivery Person | About {% endblock %}
+
+{% block about %} active {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/about.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<div class="intro-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <p>For us, it's not just about bringing you good food from your favourite restaurants. It's about making a connection, which is why we sit down with the chefs, dreaming up menus that will arrive fresh and full of flavour. Try us!</p>
+            </div>
+        </div>
+    </div>
+</div>
+<br> <br>
+<h3 style="color: #cc0000; margin-left: 80px;">How It Works</h3>
+<center>
+<table class="body-main" width="90%">
+    <tr>
+        <td align="center"><img src="{% static 'img/01.jpg' %}" height="200" width="200"></td>
+        <td align="center"><img src="{% static 'img/02.jpg' %}" height="200" width="200"></td>
+        <td align="center"><img src="{% static 'img/03.jpg' %}" height="200" width="200"></td>
+    </tr>
+    <tr style="color: #cc0000;">
+        <td align="center"><h4>Order</h4></td>
+        <td align="center"><h4>Relax</h4></td>
+        <td align="center"><h4>Enjoy</h4></td>
+    </tr>
+    <tr>
+        <td align="center" width="20%">Discover all delicious restaurants near you and order their tasty meals right to you.</td>
+        <td align="center" width="20%">Sit back and relax as the restaurant prepares your order.</td>
+        <td align="center" width="20%">Our delivery guy picks up your order and brings it to you. Enjoy!</td>
+    </tr>
+</table>
+</center>
+<br> <br>
+<div id="content" role="main">
+    <div class="featurebg-container section">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <h3>Our Mission</h3>
+                    <p>
+                        <p>"Bringing good food into your everyday. That's our mission.</p>
+                        <p>That means we don't just deliver--we bring it, always going the extra mile to make your experience memorable.</p>
+                        <p>And it means this is delicious food you can enjoy everyday: from vibrant salads for healthy office lunches, to indulgent family-sized pizzas, to fresh sushi for a romantic night in. Whatever you crave, we can help."</p>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

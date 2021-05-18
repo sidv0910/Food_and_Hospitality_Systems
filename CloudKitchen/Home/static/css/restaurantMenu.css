@@ -1,0 +1,48 @@
+.banner {
+  width: 1519px;
+  max-height: 500px;
+  max-width: 100%;
+}
+
+body {
+    background-color: #f2f2f2;
+}
+
+.caption {
+    background-color: #ffcc00;
+    width: 80%;
+    height: 50px;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-top: 7px;
+}
+
+.caption h4 {
+    display: inline-block;
+    padding-top: 3px;
+}
+
+.caption .btn-danger, .caption .btn-success {
+    float: right;
+}
+
+.table {
+    margin-bottom: 0px;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td {
+   background-color: #cce6ff;
+}
+
+.table-striped>tbody>tr:nth-child(even)>td {
+   background-color: #ffeecc;
+}
+
+.down {
+    background-color: #ffcccc;
+    width: 80%;
+    height: 50px;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-top: 7px;
+}

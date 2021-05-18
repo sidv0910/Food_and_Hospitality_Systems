@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">
+<script type="text/javascript" src="{% static 'js/register.js' %}"> </script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+{% endblock %}
+
+{% block title %} Register {% endblock %}
+
+{% block register %} active {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/register.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<center>
+<div class="container">
+<br>
+<div class="card bg-light" style="width: 50%;">
+<article class="card-body mx-auto" style="max-width: 500px;">
+	<h4 class="card-title mt-3 text-center">Create Account</h4>
+	<p class="text-center">Get started with your free account</p>
+	<br>
+	<form action="{% url 'Register' %}" method="post" onsubmit="return validate();">
+		{% csrf_token %}
+		<div class="form-group input-group">
+			<div class="input-group-prepend">
+				<span class="input-group-text"> <i class="fa fa-user fa-2x"></i> </span>
+			 </div>
+			{{ form.name }}
+		</div>
+		<br>
+		<div class="form-group input-group">
+			<div class="input-group-prepend">
+				<span class="input-group-text"> <i class="fa fa-envelope fa-2x"></i> </span>
+			 </div>
+			{{ form.email }}
+		</div>
+		<br>
+		<div class="form-group input-group">
+			<div class="input-group-prepend">
+				<span class="input-group-text"> <i class="fa fa-phone fa-2x"></i> </span>
+			</div>
+			<input type="text" value="+91" class="form-control" style="max-width: 60px; background-color: white;" readonly>
+			{{ form.contact }}
+		</div>
+		<br>
+		<div class="form-group input-group">
+			<div class="input-group-prepend">
+				<span class="input-group-text"> <i class="fa fa-lock fa-2x"></i> </span>
+			</div>
+			{{ form.password }}
+		</div>
+		<br>
+		<div class="form-group input-group">
+			<div class="input-group-prepend">
+				<span class="input-group-text"> <i class="fa fa-lock fa-2x"></i> </span>
+			</div>
+			{{ form.re_password }}
+		</div>
+		<br>
+		<center>
+		<div class="form-group">
+			<button type="submit" class="btn btn-primary btn-block"> Create Account </button>
+		</div>
+		</center>
+		<br>
+    	<p class="text-center">Have an account? <a href="/login">Log In</a> </p>
+	</form>
+</article>
+</div>
+</div>
+</center>
+<br>
+
+{% endblock %}

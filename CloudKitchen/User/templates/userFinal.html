@@ -1,0 +1,139 @@
+{% extends "userBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/restaurantMenu.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+{% endblock %}
+
+{% block title %} User | Cart {% endblock %}
+
+{% block cart %} active {% endblock %}
+
+{% block items %} {{ count }} {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/cart.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+<center>
+<br> <br> <br>
+<h1>Order Summary</h1>
+<br> <br>
+<center>
+<div class="caption" align="left">
+    <h4>Restaurant - {{ res }}</h4>
+</div>
+<table class="table table-striped" style="width: 80%;">
+    <thead>
+        <tr>
+            <th class="table-dark" scope="col" style="width: 5%;"></th>
+            <th class="table-dark" scope="col" style="width: 25%;">Name</th>
+            <th class="table-dark" scope="col" style="width: 25%;">Quantity</th>
+            <th class="table-dark" scope="col" style="width: 25%;">Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in obj %}
+            <tr>
+                <td align="center">
+                    {% if i.item.item_type == "Veg" %}
+                        <img src="{% static 'img/Veg.jpg' %}" width="20" height="20">
+                    {% endif %}
+                    {% if i.item.item_type == "Non-Veg" %}
+                        <img src="{% static 'img/Non-Veg.jpg' %}" width="20" height="20">
+                    {% endif %}
+                    {% if i.item.item_type == "Egg" %}
+                        <img src="{% static 'img/Egg.jpg' %}" width="20" height="20">
+                    {% endif %}
+                </td>
+                <td>{{ i.item.name }}</td>
+                <td>
+                    {% for key, value in quantity.items %}
+                        {% if key == i.item.name %}
+                            {{ value }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for key, value in price.items %}
+                        {% if key == i.item.name %}
+                            {{ value }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <th class="table-dark" scope="col" style="width: 5%;"></th>
+            <th class="table-dark" scope="col" style="width: 25%;"></th>
+            <th class="table-dark" scope="col" style="width: 25%; text-align: right;">Total &nbsp;-</th>
+            <th class="table-dark" scope="col" style="width: 25%;">{{ total }}</th>
+        </tr>
+        <tr>
+            <th class="table-dark" scope="col" style="width: 5%;"></th>
+            <th class="table-dark" scope="col" style="width: 25%;"></th>
+            <th class="table-dark" scope="col" style="width: 25%; text-align: right;">Delivery Charges &nbsp;-</th>
+            <th class="table-dark" scope="col" style="width: 25%;">Rs 25</th>
+        </tr>
+        <tr>
+            <th class="table-dark" scope="col" style="width: 5%;"></th>
+            <th class="table-dark" scope="col" style="width: 25%;"></th>
+            <th class="table-dark" scope="col" style="width: 25%; text-align: right;">Grand Total &nbsp;-</th>
+            <th class="table-dark" scope="col" style="width: 25%;">{{ gt }}</th>
+        </tr>
+    </tbody>
+</table>
+</center>
+<br> <br>
+<div class="card bg-light" style="width: 50%;">
+<article class="card-body mx-auto" style="max-width: 500px;">
+	<h4 class="card-title mt-3 text-center">Address</h4>
+	<br>
+    <div class="form-group input-group">
+        <input type="text" name="line1" size="100" class="form-control" placeholder="Line 1" value="{{ address.line1 }}" readonly>
+    </div>
+    <br>
+    <div class="form-group input-group">
+        <input type="text" name="line2" class="form-control" placeholder="Line 2" value="{{ address.line2 }}" readonly>
+    </div>
+    <br>
+    <div class="form-group input-group">
+        <input type="text" name="landmark" class="form-control" placeholder="Landmark" value="{{ address.landmark }}" readonly>
+    </div>
+    <br>
+    <div class="form-group input-group">
+        <input type="text" name="locality" class="form-control" placeholder="Locality" value="{{ address.locality }}" readonly>
+    </div>
+    <br>
+    <div class="form-group input-group">
+        <input type="text" name="city" class="form-control" placeholder="City" value="{{ address.city }}" readonly>
+    </div>
+    <br>
+    <div class="form-group input-group">
+        <input type="number" name="zip" class="form-control" placeholder="Zip" value="{{ address.zip }}" readonly>
+    </div>
+    <br>
+</article>
+</div>
+<br> <br>
+<form action="{% url 'UserOrder' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="address" value="{{ address.address_id }}">
+    <button type="submit" class="btn btn-info">Order</button>
+</form>
+<br> <br>
+</center>
+<br>
+
+{% endblock %}

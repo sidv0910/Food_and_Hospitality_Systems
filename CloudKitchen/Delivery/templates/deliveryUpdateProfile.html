@@ -1,0 +1,85 @@
+{% extends "deliveryBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+function validate() {
+    var mobile2 = document.getElementById('id_contact').value;
+	var mobile1 = parseInt(mobile2);
+
+	if (mobile1 < 6000000000 || mobile1 > 9999999999 || mobile2.length != 10) {
+        alert("Mobile Number should contain:\n1. Exactly 10 digits.\n2. Value must be between 6000000000 and 9999999999");
+        document.getElementById('id_contact').focus();
+        return false;
+	}
+
+	return true;
+}
+</script>
+
+{% endblock %}
+
+{% block title %} Delivery Person | Update Profile {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/updateProfile.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto" style="width: 50%;">
+    <div class="card card0 border-0">
+        <div class="row d-flex">
+            <div class="col-lg-6" style="width: 100%;">
+                <form class="card2 card border-0 px-4 py-5" action="{% url 'DeliveryUpdatePassword' %}" method="post" onsubmit="return validate();">
+                    {% csrf_token %}
+                    <h1 align="center">Update Profile</h1> <br> <br>
+                    <div class="row px-3">
+                        <label class="mb-1"></label>
+                        <h6 class="mb-0 text-sm">Delivery Person ID</h6><br>
+                        <input class="mb-4" type="text" name="text" placeholder="Delivery ID" value="{{ obj.delivery_id }}" readonly>
+                    </div>
+                    <div class="row px-3">
+                        <label class="mb-1"></label>
+                        <h6 class="mb-0 text-sm">Name</h6><br>
+                        <input class="mb-4" type="text" name="text" placeholder="Name" value="{{ obj.name }}" readonly>
+                    </div>
+                    <div class="row px-3">
+                        <label class="mb-1"></label>
+                        <h6 class="mb-0 text-sm">Email</h6><br>
+                        <input class="mb-4" type="email" name="text" placeholder="Email" value="{{ obj.email }}" readonly>
+                    </div>
+                    <div class="row px-3">
+                        <label class="mb-1"></label>
+                        <h6 class="mb-0 text-sm">Contact</h6><br>
+                        {{ form.contact }}
+                    </div>
+                    <div class="row px-3">
+                        <label class="mb-1"></label>
+                        <h6 class="mb-0 text-sm">Address</h6><br>
+                        {{ form.address }}
+                    </div>
+                    <br>
+                    (Note: For updating the vehicle details, kindly contact our team at cloudkitchen356@gmail.com)
+                    <br> <br> <br>
+                    <div class="row mb-3 px-3">
+                        <center><button type="submit" class="btn btn-blue text-center">Update</button></center>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends "restaurantBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    input[type="checkbox"][readonly] {
+        pointer-events: none;
+    }
+</style>
+
+{% endblock %}
+
+{% block title %} Restaurant | Orders {% endblock %}
+
+{% block orders %} active {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/orders.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<br> <br> <br>
+
+{% if obj %}
+    <center>
+    <table class="table table-striped" style="width: 80%;">
+        <thead>
+            <tr>
+                <th class="table-dark" scope="col" style="width: 10%;">Order ID</th>
+                <th class="table-dark" scope="col" style="width: 18%;">Items</th>
+                <th class="table-dark" scope="col" style="width: 10%;">Quantity</th>
+                <th class="table-dark" scope="col" style="width: 10%;">Total Price</th>
+                <th class="table-dark" scope="col" style="width: 18%;">Delivery Person</th>
+                <th class="table-dark" scope="col" style="width: 14%;">Status/Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in obj %}
+                <tr>
+                    <td>{{ i.order_number }}</td>
+                    <td>
+                        {% for key, value in items.items %}
+                            {% if key == i.order_number %}
+                                {% for j in value %}
+                                    {{ j }} <br>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for key, value in quantity.items %}
+                            {% if key == i.order_number %}
+                                {% for j in value %}
+                                    {{ j }} <br>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>Rs {{ i.total }}</td>
+                    <td>
+                        {% if i.delivery %}
+                            {% for key, value in delivery_name.items %}
+                                {% if key == i.order_number %}
+                                    {% for j in value %}
+                                        {{ j }} <br>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                            {% for key, value in delivery_contact.items %}
+                                {% if key == i.order_number %}
+                                    {% for j in value %}
+                                        {{ j }} <br>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Searching
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if i.accepted %}
+                            <input type="checkbox" checked readonly> Accepted
+                        {% else %}
+                            <input type="checkbox" readonly> Accepted
+                        {% endif %}
+                        <br>
+                        {% if i.food_is_being_prepared %}
+                            <input type="checkbox" checked readonly> Food Being Prepared
+                        {% else %}
+                            <input type="checkbox" readonly> Food Being Prepared
+                        {% endif %}
+                        <br>
+                        {% if i.ready_for_delivery %}
+                            <input type="checkbox" checked readonly> Ready For Delivery
+                        {% else %}
+                            <input type="checkbox" readonly> Ready For Delivery
+                        {% endif %}
+                        <br> <br>
+                        <form action="{% url 'UpdateOrder' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="order_id" value="{{ i.order_number }}">
+                        <center>
+                            {% if i.accepted %}
+                                {% if i.food_is_being_prepared %}
+                                    {% if i.ready_for_delivery %}
+                                        <button type="submit" class="btn btn-success" disabled>Out For Delivery</button>
+                                    {% else %}
+                                        <button type="submit" class="btn btn-success">Ready For Delivery</button>
+                                    {% endif %}
+                                {% else %}
+                                    <button type="submit" class="btn btn-success">Start Food Preparation</button>
+                                {% endif %}
+                            {% else %}
+                                <button type="submit" class="btn btn-success">Accept</button>
+                            {% endif %}
+                        </center>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </center>
+    <br>
+{% else %}
+    <h1 align="center">No Active Orders</h1>
+    <br> <br>
+{% endif %}
+</center>
+<br>
+
+{% endblock %}

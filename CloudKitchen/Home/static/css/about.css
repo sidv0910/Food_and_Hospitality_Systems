@@ -1,0 +1,47 @@
+.banner {
+  width: 1519px;
+  max-height: 500px;
+  max-width: 100%;
+}
+
+.intro-section {
+  padding: 20px;
+  background: #e6e6e6;
+}
+.intro-section p {
+  margin-bottom: 0px;
+  text-align: center;
+}
+
+.whitebg-container {
+  background: #fff;
+  border-top: 1px solid #e7e7e7;
+}
+
+.featurebg-container {
+  background: #cc0000 !important;
+}
+.featurebg-container h1,
+.featurebg-container h2,
+.featurebg-container h3,
+.featurebg-container h4,
+.featurebg-container h5,
+.featurebg-container p {
+  color: #fff;
+}
+
+.darkerbg-container,
+.whitebg-container,
+.featurebg-container,
+.rider-section{
+    padding: 80px 0 80px;
+}
+
+.body-main {
+    display: flex;
+
+}
+
+.body-main td {
+    padding: 10px;
+}
