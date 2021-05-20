@@ -456,6 +456,9 @@ def order(request):
                 items, quantity = [], []
                 total = 0
                 for i in cart_obj:
+                    item_obj = i.item
+                    item_obj.count += 1
+                    item_obj.save()
                     items.append(i.item.name)
                     quantity.append(str(i.quantity) + " x " + i.item.quantity)
                     total += i.quantity * i.item.price
