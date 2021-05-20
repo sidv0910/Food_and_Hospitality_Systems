@@ -262,7 +262,7 @@ def addItem(request, category):
         if request.method == "POST":
             form = CategoryItemForm(request.POST)
             if form.is_valid():
-                if Item.objects.filter(name=form.cleaned_data['item']).exists():
+                if Item.objects.filter(category=Category.objects.get(restaurant=obj, category=category), name=form.cleaned_data['item']).exists():
                     messages.error(request, "Item already exists.\\nTry again!")
                     return redirect('/restaurant/menu/')
                 else:

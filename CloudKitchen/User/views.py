@@ -1,14 +1,17 @@
 import random
 import string
 
+import matplotlib.pyplot as plt
+from io import StringIO
+
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from datetime import datetime
+from datetime import datetime, timedelta
 from .forms import ContactUsForm, UpdateProfileForm, AddressForm
 from .models import Query, Address
 from Home.models import User, Restaurant, Delivery
 from Restaurant.forms import ResetPasswordForm
-from Restaurant.models import Category, Item, Orders
+from Restaurant.models import Category, Item, Orders, Feedback
 from Delivery.models import Cart
 
 def homepage(request):
@@ -114,22 +117,65 @@ def updateProfile(request):
         return redirect('/')
 
 def logout(request):
-    obj = Cart.objects.filter(user=User.objects.get(email=request.session['email']))
-    if obj.exists():
-        for i in obj:
-            i.delete()
+    if 'email' in request.session:
+        obj = Cart.objects.filter(user=User.objects.get(email=request.session['email']))
+        if obj.exists():
+            for i in obj:
+                i.delete()
     request.session.flush()
     request.session.clear_expired()
     messages.success(request, "Logged Out Successfully.")
     return redirect('/')
+
+def print_graph(id):
+    res_obj = Restaurant.objects.get(restaurant_id=id)
+    cat_obj = Category.objects.filter(restaurant=res_obj)
+    obj = []
+    for i in cat_obj:
+        item_obj = Item.objects.filter(category=i)
+        for j in item_obj:
+            obj.append(j)
+    obj.sort(key=lambda x:x.count, reverse=True)
+
+    total = 0
+
+    for i in obj:
+        total += i.count
+
+    data = {obj[0].name + "\n" : (obj[0].count/total)*100, obj[1].name: (obj[1].count/total)*100, obj[2].name: (obj[2].count/total)*100,
+            obj[3].name: (obj[3].count/total)*100, obj[4].name: (obj[4].count/total)*100}
+    courses = list(data.keys())
+    values = list(data.values())
+
+    fig = plt.figure(figsize=(15, 7))
+
+    plt.bar(courses, values, width=0.4)
+
+    xlocs, xlabs = plt.xticks()
+
+    for i, v in enumerate(values):
+        plt.text(xlocs[i] - 0.16, v + 1, str(round(v, 2))+"%")
+
+    plt.xlabel("\nItem Name")
+    plt.ylabel("Percentage of time item ordered")
+    plt.ylim(0, 100)
+
+    imgdata = StringIO()
+    fig.savefig(imgdata, format='svg')
+    imgdata.seek(0)
+
+    data = imgdata.getvalue()
+    return data
 
 def browseRestaurant(request):
     if 'email' in request.session and User.objects.filter(email=request.session['email']).exists():
         obj = User.objects.get(email=request.session['email'])
         obj1 = Restaurant.objects.filter(status=True)
         obj2 = []
+        time_now = datetime.now() + timedelta(hours=5, minutes=30)
         for i in obj1:
-            if datetime.now().strftime('%A') in i.working_days and int(datetime.now().strftime('%H')) >= i.opening_time and int(datetime.now().strftime('%H')) < i.closing_time:
+            if (datetime.now().strftime('%A') in i.working_days) and (int(time_now.strftime('%H')) >= i.opening_time) and (int(time_now.strftime('%H')) < i.closing_time):
+                print(i)
                 obj2.append(i)
         cuisines, cost_for_twos = {}, {}
         for i in obj2:
@@ -164,7 +210,7 @@ def restaurantMenu(request, id):
                         carts[j.name] = Cart.objects.get(user=obj, restaurant=res, category=i, item=j)
                     else:
                         carts[j.name] = False
-            return render(request, "userRestaurantMenu.html", {'name': obj.name, 'category_object': obj1, 'res': res, 'item_object': values, 'cart_object': carts, 'cuisines': cuisines, 'cost_for_twos': cost_for_twos, 'range': range(1, 21), 'count': Cart.objects.filter(user=obj).count()})
+            return render(request, "userRestaurantMenu.html", {'name': obj.name, 'category_object': obj1, 'res': res, 'item_object': values, 'cart_object': carts, 'cuisines': cuisines, 'cost_for_twos': cost_for_twos, 'range': range(1, 21), 'count': Cart.objects.filter(user=obj).count(), 'graph': print_graph(id)})
     else:
         messages.error(request, "Please login first.")
         return redirect('/')
@@ -399,7 +445,8 @@ def order(request):
         if request.method == "POST":
             cart_obj = Cart.objects.filter(user=obj)
             res = cart_obj[0].restaurant
-            if datetime.now().strftime('%A') in res.working_days and int(datetime.now().strftime('%H')) >= res.opening_time and int(datetime.now().strftime('%H')) < res.closing_time:
+            now_time = datetime.now() + timedelta(hours=5, minutes=30)
+            if datetime.now().strftime('%A') in res.working_days and int(now_time.strftime('%H')) >= res.opening_time and int(now_time.strftime('%H')) < res.closing_time:
                 address = Address.objects.get(address_id=request.POST['address'])
                 order_obj = Orders()
                 order_obj.order_number = random.randint(100000000000, 999999999999)
@@ -480,7 +527,7 @@ def orderHistory(request):
             quantity = {}
             for i in obj1:
                 quantity[i.order_number] = [j.strip("'") for j in i.quantity.strip('[]').split(', ')]
-            name, contact = {}, {}
+            name, contact, feedback = {}, {}, {}
             for i in obj1:
                 if i.delivery:
                     obj2 = Delivery.objects.get(delivery_id=i.delivery)
@@ -490,10 +537,43 @@ def orderHistory(request):
                     else:
                         name[i.order_number].append(obj2.name)
                         contact[i.order_number].append(obj2.contact)
-            return render(request, 'userOrderHistory.html', {'name': obj.name, 'obj': obj1, 'items': items, 'quantity': quantity, 'delivery_name': name, 'delivery_contact': contact, 'count': Cart.objects.filter(user=obj).count()})
+                    if Feedback.objects.filter(order=i.order_number).exists():
+                        feedback[i.order_number] = Feedback.objects.get(order=i.order_number)
+                    else:
+                        feedback[i.order_number] = None
+            return render(request, 'userOrderHistory.html', {'name': obj.name, 'obj': obj1, 'items': items, 'quantity': quantity, 'delivery_name': name, 'delivery_contact': contact, 'count': Cart.objects.filter(user=obj).count(), 'feedback': feedback})
         else:
             obj1 = None
             return render(request, 'userOrderHistory.html', {'name': obj.name, 'obj': obj1, 'count': Cart.objects.filter(user=obj).count()})
+    else:
+        messages.error(request, "Please login first.")
+        return redirect('/')
+
+def submitFeedback(request, id):
+    if 'email' in request.session and User.objects.filter(email=request.session['email']).exists():
+        obj = User.objects.get(email=request.session['email'])
+        if request.method == "POST":
+            feedback_obj = Feedback()
+            feedback_obj.order = Orders.objects.get(order_number=id)
+            feedback_obj.food_quality = request.POST['food-quality'];
+            feedback_obj.order_accuracy = request.POST['order-accuracy'];
+            feedback_obj.packaging = request.POST['packaging'];
+            feedback_obj.feedback = request.POST['feedback'];
+            feedback_obj.save()
+            messages.success(request, "Feedback Submitted Successfully")
+            return redirect('/user/orderHistory/')
+        else:
+            obj1 = Orders.objects.filter(order_number=id, user=obj, delivered=True)
+            if obj1.exists():
+                obj1 = Orders.objects.get(order_number=id, user=obj, delivered=True)
+                items = [j.strip("'") for j in obj1.items.strip('[]').split(', ')]
+                quantity = [j.strip("'") for j in obj1.quantity.strip('[]').split(', ')]
+                obj2 = Delivery.objects.get(delivery_id=obj1.delivery)
+                name = obj2.name
+                contact = obj2.contact
+                return render(request, 'userSubmitFeedback.html', {'name': obj.name, 'obj': obj1, 'items': items, 'quantity': quantity, 'delivery_name': name, 'delivery_contact': contact, 'count': Cart.objects.filter(user=obj).count()})
+            else:
+                return redirect('/user/orderHistory/')
     else:
         messages.error(request, "Please login first.")
         return redirect('/')

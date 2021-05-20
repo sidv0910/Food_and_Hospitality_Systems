@@ -26,7 +26,7 @@ SECRET_KEY = 'c^wni&-38eo9!wc8lo(vi_t&%)3m)h+)=y1*a%e*vx%v7e6(65'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.gmail.com"

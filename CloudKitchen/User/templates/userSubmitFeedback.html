@@ -1,0 +1,161 @@
+{% extends "userBase.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    input[type="checkbox"][readonly] {
+        pointer-events: none;
+    }
+</style>
+
+<script>
+  function validate() {
+    var food_quality = document.getElementById('food-quality').value;
+    var order_accuracy = document.getElementById('order-accuracy').value;
+    var packaging = document.getElementById('packaging').value;
+
+    if (food_quality == "") {
+      alert("Please give rating for Food Quality.");
+      document.getElementById('food-quality').focus();
+      return false;
+    }
+
+    if (order_accuracy == "") {
+      alert("Please give rating for Order Accuracy.");
+      document.getElementById('order-accuracy').focus();
+      return false;
+    }
+
+    if (packaging == "") {
+      alert("Please give rating for Packaging.");
+      document.getElementById('packaging').focus();
+      return false;
+    }
+
+    return true;
+  }
+</script>
+
+{% endblock %}
+
+{% block title %} User | Submit Feedback {% endblock %}
+
+{% block profile %} active {% endblock %}
+
+{% block items %} {{ count }} {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}")</script>
+    {% endfor %}
+{% endif %}
+
+<img src="{% static 'img/submitFeedback.jpg' %}" class="banner">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<br> <br> <br>
+<center>
+<table class="table table-striped" style="width: 95%;">
+    <thead>
+        <tr>
+            <th class="table-dark" scope="col" style="width: 9%;">Order ID</th>
+            <th class="table-dark" scope="col" style="width: 15%;">Restaurant Details</th>
+            <th class="table-dark" scope="col" style="width: 14%;">Items</th>
+            <th class="table-dark" scope="col" style="width: 9%;">Quantity</th>
+            <th class="table-dark" scope="col" style="width: 7%;">Total Price</th>
+            <th class="table-dark" scope="col" style="width: 12%;">Delivery Person</th>
+            <th class="table-dark" scope="col" style="width: 12%;">Delivery Address</th>
+            <th class="table-dark" scope="col" style="width: 9%;">Order Date</th>
+            <th class="table-dark" scope="col" style="width: 8%;">Delivery Time</th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+                <td>{{ obj.order_number }}</td>
+                <td>
+                    <b>{{ obj.restaurant.restaurant_name }}</b> <br> <br>
+                    {{ obj.restaurant.address }} <br>
+                    {{ obj.restaurant.city }} - {{ obj.restaurant.zip }} <br> <br>
+                    {{ obj.restaurant.restaurant_contact }}
+                </td>
+                <td>
+                    {% for i in items %}
+                        {{ i }} <br>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for i in quantity %}
+                        {{ i }} <br>
+                    {% endfor %}
+                </td>
+                <td>Rs {{ obj.total }}</td>
+                <td>
+                    {{ delivery_name }} <br>
+                    {{ delivery_contact }}
+                </td>
+                <td>
+                    {{ obj.address.line1 }} <br>
+                    {{ obj.address.line2 }} <br>
+                    {{ obj.address.landmark }} <br>
+                    {{ obj.address.locality }} <br>
+                    {{ obj.address.city }} - {{ obj.address.zip }}
+                </td>
+                <td>
+                    {{ obj.date }}
+                </td>
+                <td>
+                    {{ obj.time }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="9" align="center">
+                    <form action="{% url 'SubmitFeedback' obj.order_number %}" method="post" onsubmit="return validate();">
+                        {% csrf_token %}
+                        <br>
+                        <select class="form-select" name="food-quality" id="food-quality" style="width: 30%;">
+                            <option selected disabled value="">Food Quality (Ratings - Out of 5)</option>
+                            <option value="5 - Excellent">5 - Excellent</option>
+                            <option value="4 - Good">4 - Good</option>
+                            <option value="3 - Fair">3 - Fair</option>
+                            <option value="2 - Average">2 - Average</option>
+                            <option value="1 - Dissatisfied">1 - Dissatisfied</option>
+                        </select>
+                        <br>
+                        <select class="form-select" name="order-accuracy" id="order-accuracy" style="width: 30%;">
+                            <option selected disabled value="">Order Accuracy (Ratings - Out of 5</option>
+                            <option value="5 - Excellent">5 - Excellent</option>
+                            <option value="4 - Good">4 - Good</option>
+                            <option value="3 - Fair">3 - Fair</option>
+                            <option value="2 - Average">2 - Average</option>
+                            <option value="1 - Dissatisfied">1 - Dissatisfied</option>
+                        </select>
+                        <br>
+                        <select class="form-select" name="packaging" id="packaging" style="width: 30%;">
+                            <option selected disabled value="">Packaging (Ratings - Out of 5</option>
+                            <option value="5 - Excellent">5 - Excellent</option>
+                            <option value="4 - Good">4 - Good</option>
+                            <option value="3 - Fair">3 - Fair</option>
+                            <option value="2 - Average">2 - Average</option>
+                            <option value="1 - Dissatisfied">1 - Dissatisfied</option>
+                        </select>
+                        <br>
+                        <textarea class="form-control" id="feedback" name="feedback" placeholder="Feedback" style="width: 30%;" rows="6" required></textarea>
+                        <br>
+                        <button type="submit" class="btn btn-success">Submit</button>
+                        <br> &nbsp;
+                    </form>
+                </td>
+            </tr>
+    </tbody>
+</table>
+</center>
+<br> <br>
+
+{% endblock %}

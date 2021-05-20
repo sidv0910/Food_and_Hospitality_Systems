@@ -11,8 +11,15 @@ from django.conf import settings
 
 from .models import User, Query, Restaurant, Delivery
 
-admin.site.register(User)
-admin.site.register(Query)
+class userInfo(admin.ModelAdmin):
+    list_display = ('email', 'name', 'contact')
+
+admin.site.register(User, userInfo)
+
+class queryInfo(admin.ModelAdmin):
+    list_display = ('subject', 'name', 'email')
+
+admin.site.register(Query, queryInfo)
 
 class adminInfo(admin.ModelAdmin):
     model = Restaurant
@@ -21,6 +28,8 @@ class adminInfo(admin.ModelAdmin):
     list_display = (
         'restaurant_name',
         'restaurant_email',
+        'restaurant_contact',
+        'restaurant_address',
         'account_actions',
     )
 
@@ -58,6 +67,8 @@ class adminInfo(admin.ModelAdmin):
                 reverse('admin:Accept', args=[obj.restaurant_id]),
                 reverse('admin:Decline', args=[obj.restaurant_id]),
             )
+    def restaurant_address(self, obj):
+        return format_html(obj.address + ", " + obj.city + " - " + str(obj.zip))
 
     def acceptApplication(self, request, restaurant_id, *args, **kwargs):
         obj = Restaurant.objects.get(restaurant_id=restaurant_id)
@@ -83,6 +94,15 @@ admin.site.register(Restaurant, adminInfo)
 class deliveryAdminInfo(admin.ModelAdmin):
     model = Delivery
     actions = ['delete_model']
+
+    list_display = (
+        'delivery_id',
+        'name',
+        'contact',
+        'address',
+        'vehicle_type',
+        'vehicle_model',
+    )
 
     def get_changeform_initial_data(self, request):
         ids = list(Delivery.objects.values_list('delivery_id', flat=True))

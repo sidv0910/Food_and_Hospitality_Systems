@@ -109,6 +109,19 @@
                         {{ i.time }}
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="9" align="center">
+                        {% for key, value in feedback.items %}
+                            {% if key == i.order_number %}
+                                {% if value %}
+                                    <button type="button" class="btn btn-primary" disabled>Feedback Submitted</button>
+                                {% else %}
+                                    <a href="/user/submitFeedback/{{ i.order_number }}"><button type="button" class="btn btn-primary">Submit Feedback</button></a>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>

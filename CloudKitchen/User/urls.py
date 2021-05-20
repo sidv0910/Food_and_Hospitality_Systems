@@ -23,6 +23,7 @@ urlpatterns = [
     path('saveAndFinal/', views.saveAndFinal, name="SaveAndFinal"),
     path('order/', views.order, name="UserOrder"),
     path('orderHistory/', views.orderHistory, name="UserOrderHistory"),
+    path('submitFeedback/<str:id>', views.submitFeedback, name="SubmitFeedback"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

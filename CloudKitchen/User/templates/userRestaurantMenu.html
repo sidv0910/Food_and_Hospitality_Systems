@@ -5,6 +5,7 @@
 {% block head %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/restaurantMenu.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/about.css' %}">
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 {% endblock %}
@@ -128,6 +129,21 @@
         </center>
         <br> <br>
     {% endfor %}
+<br>
+<div id="content" role="main">
+    <div class="featurebg-container section">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <h3 align="center">Most Ordered Items from {{ res.restaurant_name }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br> <br>
+{{ graph|safe }}
+<br> <br>
 {% else %}
     <h1 align="center">No Items Available</h1>
     <br> <br>

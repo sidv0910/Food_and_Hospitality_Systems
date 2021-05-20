@@ -24,6 +24,7 @@ class Item(models.Model):
     quantity = models.CharField(max_length=100)
     item_type = models.CharField(max_length=7)
     price = models.DecimalField(max_digits=5, decimal_places=2)
+    count = models.IntegerField(default=0)
 
 class Orders(models.Model):
     order_number = models.IntegerField(primary_key=True)
@@ -32,7 +33,7 @@ class Orders(models.Model):
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     items = models.CharField(max_length=500)
     quantity = models.CharField(max_length=50)
-    total = models.DecimalField(max_digits=5, decimal_places=2)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
     delivery = models.CharField(max_length=6, blank=True, null=True)
     accepted = models.BooleanField(default=False)
     food_is_being_prepared = models.BooleanField(default=False)
@@ -42,3 +43,10 @@ class Orders(models.Model):
     delivered = models.BooleanField(default=False)
     date = models.DateField(default="2020-01-01")
     time = models.TimeField(default="00:00:00")
+
+class Feedback(models.Model):
+    order = models.ForeignKey(Orders, unique=True, on_delete=models.CASCADE)
+    food_quality = models.CharField(max_length=15)
+    order_accuracy = models.CharField(max_length=15)
+    packaging = models.CharField(max_length=15)
+    feedback = models.CharField(max_length=500)
