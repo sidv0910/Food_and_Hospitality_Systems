@@ -6,7 +6,7 @@ from wsgiref.util import FileWrapper
 import mimetypes
 from django.http import HttpResponse
 from .forms import ContactUsForm, CategoryForm, CategoryItemForm, ResetPasswordForm, UpdateProfileForm
-from .models import Query, Category, Item, Orders
+from .models import Query, Category, Item, Orders, Feedback
 from Home.models import Restaurant, Delivery
 
 def homepage(request):
@@ -470,7 +470,7 @@ def orderHistory(request):
             quantity = {}
             for i in obj1:
                 quantity[i.order_number] = [j.strip("'") for j in i.quantity.strip('[]').split(', ')]
-            name, contact = {}, {}
+            name, contact, feedback = {}, {}, {}
             for i in obj1:
                 obj2 = Delivery.objects.get(delivery_id=i.delivery)
                 if i.order_number not in name.keys():
@@ -479,7 +479,12 @@ def orderHistory(request):
                 else:
                     name[i.order_number].append(obj2.name)
                     contact[i.order_number].append(obj2.contact)
-            return render(request, 'orderHistory.html', {'name': obj.restaurant_name, 'obj': obj1, 'items': items, 'quantity': quantity, 'delivery_name': name, 'delivery_contact': contact})
+            for i in obj1:
+                if Feedback.objects.filter(order=i).exists():
+                    feedback[i.order_number] = Feedback.objects.get(order=i)
+                else:
+                    feedback[i.order_number] = None
+            return render(request, 'orderHistory.html', {'name': obj.restaurant_name, 'obj': obj1, 'items': items, 'quantity': quantity, 'delivery_name': name, 'delivery_contact': contact, 'feedback': feedback})
         else:
             obj1 = None
         return render(request, 'orderHistory.html', {'name': obj.restaurant_name, 'obj': obj1})

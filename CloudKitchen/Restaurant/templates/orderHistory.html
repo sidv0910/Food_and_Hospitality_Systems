@@ -12,6 +12,12 @@
     }
 </style>
 
+<script>
+    function feedback(message) {
+        alert("Feedback: \n" + message);
+    }
+</script>
+
 {% endblock %}
 
 {% block title %} Restaurant | Order History {% endblock %}
@@ -90,6 +96,77 @@
                     </td>
                     <td>
                         {{ i.time }}
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="7">
+                        {% for key, value in feedback.items %}
+                            {% if key == i.order_number %}
+                                {% if value %}
+                                <div class="row">
+                                    <div class="col-sm-3 col-12">
+                                        <span class="align-middle"><b>Food Quality:
+                                        {% if "5" in value.food_quality %}
+                                            &#9733; &#9733; &#9733; &#9733; &#9733;
+                                        {% endif %}
+                                        {% if "4" in value.food_quality %}
+                                            &#9733; &#9733; &#9733; &#9733;
+                                        {% endif %}
+                                        {% if "3" in value.food_quality %}
+                                            &#9733; &#9733; &#9733;
+                                        {% endif %}
+                                        {% if "2" in value.food_quality %}
+                                            &#9733; &#9733;
+                                        {% endif %}
+                                        {% if "1" in value.food_quality %}
+                                            &#9733;
+                                        {% endif %}</b></span>
+                                    </div>
+                                    <div class="col-sm-3 col-12">
+                                        <span class="align-middle"><b>Order Accuracy:
+                                        {% if "5" in value.order_accuracy %}
+                                            &#9733; &#9733; &#9733; &#9733; &#9733;
+                                        {% endif %}
+                                        {% if "4" in value.order_accuracy %}
+                                            &#9733; &#9733; &#9733; &#9733;
+                                        {% endif %}
+                                        {% if "3" in value.order_accuracy %}
+                                            &#9733; &#9733; &#9733;
+                                        {% endif %}
+                                        {% if "2" in value.order_accuracy %}
+                                            &#9733; &#9733;
+                                        {% endif %}
+                                        {% if "1" in value.order_accuracy %}
+                                            &#9733;
+                                        {% endif %}</b></span>
+                                    </div>
+                                    <div class="col-sm-3 col-12">
+                                        <span class="align-middle"><b>Packaging:
+                                        {% if "5" in value.packaging %}
+                                            &#9733; &#9733; &#9733; &#9733; &#9733;
+                                        {% endif %}
+                                        {% if "4" in value.packaging %}
+                                            &#9733; &#9733; &#9733; &#9733;
+                                        {% endif %}
+                                        {% if "3" in value.packaging %}
+                                            &#9733; &#9733; &#9733;
+                                        {% endif %}
+                                        {% if "2" in value.packaging %}
+                                            &#9733; &#9733;
+                                        {% endif %}
+                                        {% if "1" in value.packaging %}
+                                            &#9733;
+                                        {% endif %}</b></span>
+                                    </div>
+                                    <div class="col-sm-3 col-12">
+                                        <button type="button" class="btn btn-secondary" onclick="return feedback('{{ value.feedback }}');">View Feedback</button>
+                                    </div>
+                                </div>
+                                {% else %}
+                                    <span class="align-middle"><b>No Ratings & Feedback</b></span>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
                     </td>
                 </tr>
             {% endfor %}
